@@ -30,6 +30,9 @@ function preload(){
   
   gameOverImg = loadImage("gameOver.png");
   restartImg = loadImage("restart.png");
+ jumpSound = loadSound("jump.mp3");
+  dieSound = loadSound("die.mp3");
+  checkPointSound = loadSound("checkPoint.mp3");
 }
 
 function setup() {
@@ -76,7 +79,7 @@ function draw() {
     score = score + Math.round(getFrameRate()/60);
     if(keyDown("space") && trex.y>=159 ) {
       trex.velocityY = -10;
-      
+      jumpSound.play();
     }
 ground.velocityX = -(6 + 3*score/100);
     trex.velocityY = trex.velocityY + 0.8
@@ -84,7 +87,9 @@ ground.velocityX = -(6 + 3*score/100);
     if (ground.x < 0){
       ground.x = ground.width/2;
     }
-
+    if (score>0 && score%100 === 0){
+      checkPointSound.play(); 
+    }
    
     spawnClouds();
     spawnObstacles();
@@ -92,6 +97,7 @@ ground.velocityX = -(6 + 3*score/100);
     if(obstaclesGroup.isTouching(trex)){
      // playSound("jump.mp3");
       gameState = END;
+     dieSound.play();
      // playSound("die.mp3");
     }
   }
